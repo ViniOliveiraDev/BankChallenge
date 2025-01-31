@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {AccountModel} from '../../src/domains/account/infrastructure/schema/AccountSchema';
+import {AccountModel} from '../../src/domains/account/infrastructure/AccountSchema';
 
 describe('AccountSchema', () => {
     beforeAll(async () => {

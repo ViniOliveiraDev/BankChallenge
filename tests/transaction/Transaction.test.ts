@@ -1,5 +1,5 @@
 import {Account} from "../../src/domains/account/domain/Account";
-import {Transaction} from "../../src/domains/transaction/domain/entities/Transaction";
+import {Transaction} from "../../src/domains/transaction/domain/Transaction";
 
 describe('Transaction', () => {
     const originator = new Account('12345', 'John Doe', 100);
