@@ -34,6 +34,7 @@ describe('TransactionSchema', () => {
 
     afterAll(async () => {
         // Close the database connection after all tests
+        await mongoose.connection.db?.dropDatabase();
         await mongoose.connection.close();
     });
 

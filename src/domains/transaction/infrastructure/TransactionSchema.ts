@@ -7,12 +7,13 @@ export interface ITransactionDocument extends Document {
     amount: number;
 }
 
-// Schema do Mongoose para Transaction
 const TransactionSchema: Schema = new Schema({
-    originator: {type: Schema.Types.ObjectId, ref: 'Account', required: true},
-    beneficiary: {type: Schema.Types.ObjectId, ref: 'Account', required: true},
+    originator: {type: Schema.Types.ObjectId, ref: "Account", required: true},
+    beneficiary: {type: Schema.Types.ObjectId, ref: "Account", required: true},
     amount: {type: Number, required: true},
 });
 
-// Criar e exportar o modelo
-export const TransactionModel = model<ITransactionDocument>('Transaction', TransactionSchema);
+export const TransactionModel = model<ITransactionDocument>(
+    "Transaction",
+    TransactionSchema
+);

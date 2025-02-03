@@ -1,6 +1,7 @@
 import {Document, model, Schema} from 'mongoose';
 
 export interface IAccountDocument extends Document {
+    id: Schema.Types.ObjectId;
     number: string;
     name: string;
     balance: number;

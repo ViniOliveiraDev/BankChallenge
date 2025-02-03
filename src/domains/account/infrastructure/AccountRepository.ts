@@ -2,6 +2,7 @@ import {Account} from "../domain/Account";
 import {AccountModel} from "./AccountSchema";
 import {AccountMapper} from "./AccountMapper";
 import {IAccountDTO} from "./IAccountDTO";
+import {Schema} from "mongoose";
 
 export class AccountRepository implements AccountRepository {
     async findByNumber(number: string): Promise<Account | null> {
@@ -9,6 +10,7 @@ export class AccountRepository implements AccountRepository {
         if (!accountDoc) return null;
 
         const accountDTO: IAccountDTO = {
+            id: accountDoc._id as Schema.Types.ObjectId,
             number: accountDoc.number,
             name: accountDoc.name,
             balance: accountDoc.balance,

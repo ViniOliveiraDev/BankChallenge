@@ -4,6 +4,7 @@ import {IAccountDTO} from "./IAccountDTO";
 export class AccountMapper {
     static toDTO(account: Account): IAccountDTO {
         return {
+            id: account.id,
             number: account.number,
             name: account.name,
             balance: account.balance,
@@ -16,6 +17,8 @@ export class AccountMapper {
      * @returns {Account} The Account object converted from the IAccountDTO object.
      */
     static toDomain(accountDTO: IAccountDTO): Account {
-        return new Account(accountDTO.number, accountDTO.name, accountDTO.balance);
+        let account = new Account(accountDTO.number, accountDTO.name, accountDTO.balance);
+        if (accountDTO.id) account.id = accountDTO.id;
+        return account;
     }
 }

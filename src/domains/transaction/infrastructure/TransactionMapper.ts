@@ -1,5 +1,5 @@
-import {Transaction} from "../domain/Transaction";
 import {TransactionDTO} from "./ITransactionDTO";
+import {Transaction} from "../domain/Transaction";
 import {AccountMapper} from "../../account/infrastructure/AccountMapper";
 
 export class TransactionMapper {
@@ -10,6 +10,7 @@ export class TransactionMapper {
             amount: transaction.amount,
         };
     }
+
 
     static toDomain(transactionDTO: TransactionDTO): Transaction {
         return new Transaction(

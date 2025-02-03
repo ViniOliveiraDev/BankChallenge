@@ -1,4 +1,6 @@
 // src/domain/entities/Account.ts
+import {Schema} from "mongoose";
+
 export class Account {
     constructor(
         private readonly _number: string,
@@ -7,7 +9,18 @@ export class Account {
     ) {
     }
 
+    private _id?: Schema.Types.ObjectId
+
     // Getters
+    get id(): Schema.Types.ObjectId {
+        return this._id as Schema.Types.ObjectId;
+    }
+
+    // Setter ID
+    set id(id: Schema.Types.ObjectId) {
+        this._id = id;
+    }
+
     get name(): string {
         return this._name;
     }

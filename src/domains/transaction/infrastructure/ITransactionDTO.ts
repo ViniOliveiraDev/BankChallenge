@@ -1,7 +1,7 @@
-import {Schema} from "mongoose";
+import {IAccountDTO} from "../../account/infrastructure/IAccountDTO";
 
 export interface TransactionDTO {
-    originator: Schema.Types.ObjectId;
-    beneficiary: Schema.Types.ObjectId;
+    originator: IAccountDTO;
+    beneficiary: IAccountDTO;
     amount: number;
 }
