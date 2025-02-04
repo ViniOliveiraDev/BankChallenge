@@ -20,22 +20,22 @@ describe("TransactionRepository", () => {
 
         const originatorDoc = new AccountModel({
             number: "12345",
-            name: "John Doe",
+            name: "Vinícius Oliveira",
             balance: 100,
         });
 
         const beneficiaryDoc = new AccountModel({
             number: "67890",
-            name: "Jane Doe",
+            name: "Oliveira Vinícius",
             balance: 50,
         });
 
         await originatorDoc.save();
         await beneficiaryDoc.save();
 
-        originator = new Account(originatorDoc.number, originatorDoc.name, originatorDoc.balance);
+        originator = new Account(originatorDoc.name, originatorDoc.balance, originatorDoc.number);
         originator.id = originatorDoc._id as Schema.Types.ObjectId;
-        beneficiary = new Account(beneficiaryDoc.number, beneficiaryDoc.name, beneficiaryDoc.balance);
+        beneficiary = new Account(beneficiaryDoc.name, beneficiaryDoc.balance, beneficiaryDoc.number,);
         beneficiary.id = beneficiaryDoc._id as Schema.Types.ObjectId;
     });
 
@@ -82,7 +82,7 @@ describe("TransactionRepository", () => {
 
         const foundTransactions = await repository.findByBeneficiary("67890");
         expect(foundTransactions.length).toBe(1);
-        
+
         expect(foundTransactions[0].originator.number).toBe("12345");
         expect(foundTransactions[0].beneficiary.number).toBe("67890");
         expect(foundTransactions[0].amount).toBe(30);

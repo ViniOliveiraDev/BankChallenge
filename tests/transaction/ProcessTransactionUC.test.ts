@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import {
     ProcessTransactionInput,
     ProcessTransactionUC
-} from "../../src/domains/transaction/application/use-cases/ProccessTransactionUC";
+} from "../../src/domains/transaction/application/use-cases/ProcessTransactionUC";
 import {AccountRepository} from "../../src/domains/account/infrastructure/AccountRepository";
 import {TransactionRepository} from "../../src/domains/transaction/infrastructure/TransactionRepository";
 import {AccountModel} from "../../src/domains/account/infrastructure/AccountSchema";

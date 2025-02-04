@@ -24,33 +24,35 @@ describe('AccountRepository', () => {
     });
 
     it('should save and find an account by number', async () => {
-        const account = new Account('12345', 'Vinícius Oliveira', 100);
+        const account = new Account('Vinícius Oliveira', 100);
+        const accountNumber = account.number
         await repository.save(account);
-
-        const foundAccount = await repository.findByNumber('12345');
+        const foundAccount = await repository.findByNumber(accountNumber);
         expect(foundAccount).not.toBeNull();
-        expect(foundAccount?.number).toBe('12345');
+        expect(foundAccount?.number).toHaveLength(8);
+        expect(foundAccount?.number).toEqual(accountNumber);
         expect(foundAccount?.name).toBe('Vinícius Oliveira');
         expect(foundAccount?.balance).toBe(100);
     });
 
     it('should update an account', async () => {
-        const account = new Account('12345', 'Vinícius Oliveira', 100);
+        const account = new Account('Vinícius Oliveira', 100);
         await repository.save(account);
-
+        const accountNumber = account.number
         account.addBalance(100);
         await repository.update(account);
 
-        const updatedAccount = await repository.findByNumber('12345');
+        const updatedAccount = await repository.findByNumber(accountNumber);
         expect(updatedAccount?.balance).toBe(200);
     });
 
     it('should delete an account', async () => {
-        const account = new Account('12345', 'Vinícius Oliveira', 100);
+        const account = new Account('Vinícius Oliveira', 100);
+        const accountNumber = account.number
         await repository.save(account);
 
-        await repository.delete('12345');
-        const deletedAccount = await repository.findByNumber('12345');
+        await repository.delete(accountNumber);
+        const deletedAccount = await repository.findByNumber(accountNumber);
         expect(deletedAccount).toBeNull();
     });
 });

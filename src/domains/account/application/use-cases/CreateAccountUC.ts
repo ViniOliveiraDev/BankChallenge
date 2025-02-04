@@ -1,32 +1,30 @@
 import {IAccountRepository} from "../../domain/IAccountRepository";
 import {Account} from "../../domain/Account";
-
-export interface CreateAccountInput {
-    number: string;
-    name: string;
-    balance: number;
-}
+import {IAccountDTO} from "../../infrastructure/IAccountDTO";
+import {AccountMapper} from "../../infrastructure/AccountMapper";
 
 export class CreateAccountUC {
+
     constructor(private accountRepository: IAccountRepository) {
     }
 
-    async execute(input: CreateAccountInput): Promise<void> {
-        if (!input.number || !input.name || input.balance === undefined) {
-            throw new Error("All fields are required.");
-        }
-
-        if (input.balance < 0) {
-            throw new Error("Balance cannot be negative.");
-        }
-
-        const existingAccount = await this.accountRepository.findByNumber(input.number);
-        if (existingAccount) {
-            throw new Error("Account with this number already exists.");
-        }
-
-        const account = new Account(input.number, input.name, input.balance);
-
+    async execute(name: string): Promise<IAccountDTO> {
+        const account = await this.validateAccountNumber(name);
         await this.accountRepository.save(account);
+        return AccountMapper.toDTO(account);
+    }
+
+    private async validateAccountNumber(name: string): Promise<Account> {
+        // verify if the account's number exists, and try to generate a new one if it doesn't 'till it success
+        let done = false;
+        let finalAccount: Account = new Account(name);
+        while (!done) {
+            const existingAccount = await this.accountRepository.findByNumber(finalAccount.number);
+            finalAccount = new Account(name);
+            if (!existingAccount) {
+                done = true;
+            }
+        }
+        return finalAccount;
     }
 }

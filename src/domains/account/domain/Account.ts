@@ -2,11 +2,15 @@
 import {Schema} from "mongoose";
 
 export class Account {
+
     constructor(
-        private readonly _number: string,
         private readonly _name: string,
-        private _balance: number
+        private _balance: number = 0,
+        private readonly _number: string = ""
     ) {
+        if (!this._number) {
+            this._number = this.generateAccountNumber();
+        }
     }
 
     private _id?: Schema.Types.ObjectId
@@ -60,5 +64,9 @@ export class Account {
             throw new Error('Insufficient balance.');
         }
         this._balance -= amount;
+    }
+
+    private generateAccountNumber(): string {
+        return Array.from({length: 8}, () => Math.floor(Math.random() * 10)).join('');
     }
 }

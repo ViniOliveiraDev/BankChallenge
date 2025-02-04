@@ -2,8 +2,8 @@ import {Account} from "../../src/domains/account/domain/Account";
 import {Transaction} from "../../src/domains/transaction/domain/Transaction";
 
 describe('Transaction', () => {
-    const originator = new Account('12345', 'John Doe', 100);
-    const beneficiary = new Account('67890', 'Jane Doe', 50);
+    const originator = new Account('Vinícius Oliveira', 100);
+    const beneficiary = new Account('Oliveira Vinícius', 50);
 
     it('should create a transaction with the correct properties', () => {
         const transaction = new Transaction(originator, beneficiary, 30);

@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import {GetAccountInput, GetAccountUC} from "../../src/domains/account/application/use-cases/GetAccountUC";
+import {GetAccountUC} from "../../src/domains/account/application/use-cases/GetAccountUC";
 import {AccountModel} from "../../src/domains/account/infrastructure/AccountSchema";
 import {AccountRepository} from "../../src/domains/account/infrastructure/AccountRepository";
 
@@ -32,25 +32,15 @@ describe("GetAccountUC", () => {
 
         await account.save();
 
-        // Get the account
-        const input: GetAccountInput = {
-            number: "12345",
-        };
+        const output = await getAccountUC.execute("12345");
 
-        const output = await getAccountUC.execute(input);
-
-        // Verify the output
         expect(output.number).toBe("12345");
         expect(output.name).toBe("Vinícius Oliveira");
         expect(output.balance).toBe(100);
     });
 
     it("should throw an error if account is not found", async () => {
-        const input: GetAccountInput = {
-            number: "12345",
-        };
-
-        await expect(getAccountUC.execute(input)).rejects.toThrow(
+        await expect(getAccountUC.execute("12345")).rejects.toThrow(
             "Account not found."
         );
     });

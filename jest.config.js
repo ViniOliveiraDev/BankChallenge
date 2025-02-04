@@ -1,9 +1,10 @@
 module.exports = {
-    preset: 'ts-jest', // Usar o preset ts-jest para TypeScript
-    testEnvironment: 'node', // Ambiente de teste (Node.js)
-    testMatch: ['**/*.test.ts'], // Padrão para encontrar arquivos de teste
+    preset: 'ts-jest', // typescript preset
+    testTimeout: 60000, // 1 minute Tests Timeout
+    testEnvironment: 'node', // test environment as node
+    testMatch: ['**/*.test.ts'],
     transform: {
-        '^.+\\.ts$': 'ts-jest', // Transformar arquivos TypeScript
+        '^.+\\.ts$': 'ts-jest',
     },
-    moduleFileExtensions: ['ts', 'js', 'json'], // Extensões de arquivo suportadas
+    moduleFileExtensions: ['ts', 'js', 'json'],
 };

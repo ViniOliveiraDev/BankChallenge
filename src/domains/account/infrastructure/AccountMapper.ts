@@ -17,7 +17,7 @@ export class AccountMapper {
      * @returns {Account} The Account object converted from the IAccountDTO object.
      */
     static toDomain(accountDTO: IAccountDTO): Account {
-        let account = new Account(accountDTO.number, accountDTO.name, accountDTO.balance);
+        let account = new Account(accountDTO.name, accountDTO.balance, accountDTO.number);
         if (accountDTO.id) account.id = accountDTO.id;
         return account;
     }
