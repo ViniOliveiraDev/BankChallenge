@@ -1,13 +1,12 @@
-import './index.css'
+import './globals.css'
+import {ThemeProvider} from "@/hooks/theme-provider.tsx";
+import {AppRouter} from "@/routes/app-router.tsx";
 
 function App() {
-
     return (
-        <>
-            <p className="read-the-docs">
-                Click on the Vite and React logos to learn more
-            </p>
-        </>
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+            <AppRouter/>
+        </ThemeProvider>
     )
 }
 
