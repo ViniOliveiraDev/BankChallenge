@@ -1,126 +1,141 @@
-"use client"
-
-import {useState} from "react"
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
-import {Button} from "@/components/ui/button"
-import {ArrowUpRight, Ellipsis, EyeIcon, EyeOffIcon, TrendingDown, TrendingUp} from "lucide-react"
+import {useEffect, useState} from "react"
 import {ScrollArea} from "@/components/ui/scroll-area"
-import {Collapsible, CollapsibleContent, CollapsibleTrigger,} from "@/components/ui/collapsible"
-import {Separator} from "@/components/ui/separator.tsx";
+import {Card} from "@/components/ui/card"
+import {ArrowDownLeft, ArrowUpRight} from "lucide-react"
 
-
-type Account = {
+interface Transaction {
     id: string
-    number: string
-    name: string
-    balance: number
+    date: Date
+    originator: string
+    beneficiary: string
+    amount: number
+    type: 'send' | 'received'
 }
 
+interface GroupedTransactions {
+    [key: string]: Transaction[]
+}
 
-const accounts: Account[] = [
-    {id: "1", number: "12345678", name: "Vinícius Oliveira", balance: 5000.0},
-    {id: "2", number: "87654321", name: "Vinícius José Oliveira", balance: 10000.0},
-    {id: "3", number: "23456789", name: "Vinícius Ribeiro Oliveira", balance: 25000.0},
-    // {id: "4", number: "98765432", name: "Vinícius José Ribeiro de Oliveira", balance: 3000.0},
-    // {id: "5", number: "56789012", name: "Vinícius Ribeiro", balance: 15000.0},
-    // {id: "6", number: "34567890", name: "Vinícius José Ribeiro", balance: 50000.0},
-]
+function groupTransactionsByDate(transactions: Transaction[]): GroupedTransactions {
+    return transactions.reduce((groups, transaction) => {
+        const date = transaction.date.toISOString().split("T")[0]
+        if (!groups[date]) {
+            groups[date] = []
+        }
+        groups[date].push(transaction)
+        return groups
+    }, {} as GroupedTransactions)
+}
 
-function AccountCard({account}: { account: Account }) {
-    const [isBalanceVisible, setIsBalanceVisible] = useState(false)
+function formatDate(date: string): string {
+    const [year, month, day] = date.split("-").map(Number);
+    const parsedDate = new Date(year, month - 1, day); // Usa o fuso local
 
-    const toggleBalanceVisibility = () => {
-        setIsBalanceVisible(!isBalanceVisible)
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const isSameDay = (d1: Date, d2: Date) =>
+        d1.getDate() === d2.getDate() &&
+        d1.getMonth() === d2.getMonth();
+
+    if (isSameDay(parsedDate, today)) {
+        return "Today";
+    } else if (isSameDay(parsedDate, yesterday)) {
+        return "Yesterday";
+    } else {
+        return parsedDate.toLocaleDateString("en-US", {day: "numeric", month: "long"});
     }
-
-    return (
-        <Card className="mb-4 last:mb-0 w-[280px] rounded-xl overflow-visible">
-            <Collapsible>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 text-wrap">
-                    <CardTitle className="text-sm font-medium">{account.name}</CardTitle>
-                    <div className="flex gap-2 ">
-                        <CollapsibleTrigger><Button variant="ghost" size="icon"
-                                                    className="text-foreground"><Ellipsis/></Button></CollapsibleTrigger>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <div className="flex justify-between items-center mb-2">
-                        <div className="text-2xl font-bold">
-                            {isBalanceVisible
-                                ? new Intl.NumberFormat("pt-BR", {
-                                    style: "currency",
-                                    currency: "BRL"
-                                }).format(account.balance)
-                                : "R$ ••••••"}
-                        </div>
-                        <Button
-                            variant="ghost"
-                            size="icon"
-                            onClick={toggleBalanceVisibility}
-                            aria-label={isBalanceVisible ? "Show balance" : "Hide balance"}
-                        >
-                            {isBalanceVisible ? <EyeOffIcon className="h-4 w-4"/> : <EyeIcon className="h-4 w-4"/>}
-                        </Button>
-
-                    </div>
-                    <p className="text-xs text-muted-foreground">Nº: {account.number}</p>
-                    <CollapsibleContent
-                        className="flex flex-col gap-2 mt-4 data-[state=open]:animate-slide-down data-[state=closed]:animate-slide-up">
-                        <div className="flex justify-between">
-                            <div className="flex gap-2 items-center font-thin">
-
-                                <div className="text-muted-foreground">Owns</div>
-                            </div>
-                            <div className="flex gap-4 items-center text-muted-foreground">
-                                <TrendingUp className="h-4 w-4 text-primary"/>
-
-                                {isBalanceVisible
-                                    ? new Intl.NumberFormat("pt-BR", {
-                                        style: "currency",
-                                        currency: "BRL"
-                                    }).format("12234")
-                                    : "R$ ••••••"}
-
-                            </div>
-                        </div>
-                        <div className="flex justify-between">
-                            <div className="flex gap-2 items-center font-thin">
-                                <div className="text-muted-foreground">Expenses</div>
-                            </div>
-                            <div className="flex gap-4 items-center text-muted-foreground">
-                                <TrendingDown className="h-4 w-4 text-destructive"/>
-                                {isBalanceVisible
-                                    ? new Intl.NumberFormat("pt-BR", {
-                                        style: "currency",
-                                        currency: "BRL"
-                                    }).format("12234")
-                                    : "R$ ••••••"}
-                            </div>
-
-                        </div>
-                        <div className="flex flex-col justify-end">
-                            <div className="flex justify-center mt-1"><Separator className="w-1/2 "/></div>
-                            <Button className="mt-2 bg-primary hover:bg-primary/80 text-white hover:text-white"
-                                    variant="outline">
-                                <ArrowUpRight/> Send
-                                Transaction</Button>
-                        </div>
-                    </CollapsibleContent>
-                </CardContent>
-            </Collapsible>
-        </Card>
-    )
 }
 
-export function TransactionHistory() {
+
+export default function TransactionHistory() {
+    const [groupedTransactions, setGroupedTransactions] = useState<GroupedTransactions>({})
+    useEffect(() => {
+        // Simulating data fetching
+        const fetchTransactions = () => {
+            const mockTransactions: Transaction[] = [
+                {
+                    id: "1",
+                    date: new Date(),
+                    originator: "Vinícius José Oliveira",
+                    beneficiary: "Vinícius Oliveira",
+                    amount: 1000,
+                    type: 'received'
+                },
+                {
+                    id: "2",
+                    date: new Date(Date.now() - 86400000),
+                    originator: "Vinícius Oliveira",
+                    beneficiary: "Bob Williams",
+                    amount: 750, type: 'send'
+                },
+                {
+                    id: "3",
+                    date: new Date(Date.now() - 86400000),
+                    originator: "Emma Brown",
+                    beneficiary: "Vinícius Oliveira",
+                    amount: 500, type: 'received'
+                },
+                {
+                    id: "4",
+                    date: new Date(Date.now() - 172800000),
+                    originator: "Vinícius Oliveira",
+                    beneficiary: "Vinícius Ribeiro Oliveira",
+                    amount: 1200, type: 'send'
+                },
+                {
+                    id: "5",
+                    date: new Date(Date.now() - 172800000),
+                    originator: "James Anderson",
+                    beneficiary: "Vinícius Oliveira",
+                    amount: 300, type: 'received'
+                },
+            ]
+
+            const sorted = mockTransactions.sort((a, b) => b.date.getTime() - a.date.getTime())
+            setGroupedTransactions(groupTransactionsByDate(sorted))
+        }
+
+        fetchTransactions()
+    }, [])
+
     return (
-        <ScrollArea className="h-[calc(100vh-12rem)] w-[calc(100vw-8rem] py-2">
-            <div className="space-y-4">
-                {accounts.map((account) => (
-                    <AccountCard key={account.id} account={account}/>
+        <Card className="w-full">
+            <ScrollArea className="h-[calc(100vh-8.1rem)] w-full rounded-xl pt-4 px-3">
+                {Object.entries(groupedTransactions).map(([date, transactions]) => (
+                    <div key={date} className="mb-6">
+                        <h3 className="text-md mb-2 font-thin">{formatDate(date.toString().split("T")[0])}</h3>
+                        {transactions.map((transaction) => (
+                            <div key={transaction.id} className="bg-secondary px-4 py-4 md:py-6 rounded-lg mb-2">
+                                <div className="flex justify-between items-start mb-1 text-xs">
+                                    <div className="font-thin">
+                                        <div className="flex items-center">
+                                            <ArrowUpRight className="mr-2 text-red-500" size={16}/>
+                                            <span className="text-xs">{transaction.originator}</span>
+                                        </div>
+                                        <div className="flex items-center mt-1">
+                                            <ArrowDownLeft className="mr-2 text-green-500" size={16}/>
+                                            <span className="text-xs">{transaction.beneficiary}</span>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                            <span
+                                                className={`font-bold ${transaction.type === 'received' ? 'text-green-500' : ''}`}>R$ {transaction.type === 'send' ? '-' : ''}{transaction.amount.toFixed(2)}</span>
+                                        <p className="text-xs text-muted-foreground">
+                                            {transaction.date.toLocaleTimeString([], {
+                                                hour: "2-digit",
+                                                minute: "2-digit"
+                                            })}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
                 ))}
-            </div>
-        </ScrollArea>
+            </ScrollArea>
+        </Card>
     )
 }
 
