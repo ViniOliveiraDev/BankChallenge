@@ -3,7 +3,7 @@ import {BarChart3, CreditCard, Gem, Home} from "lucide-react"
 
 import {cn} from "@/lib/utils"
 import {Button} from "@/components/ui/button"
-import {ModeToggle} from "@/components/sidebar/mode-toggle.tsx";
+import {ThemeToggle} from "@/components/sidebar/theme-toggle.tsx";
 
 const menuItems = [
     {name: "Dashboard", href: "/", icon: Home},
@@ -42,7 +42,7 @@ export function TopMenu() {
                         ))}
                     </div>
                     <div>
-                        <ModeToggle/>
+                        <ThemeToggle/>
                     </div>
                 </div>
             </div>

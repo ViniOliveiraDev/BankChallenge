@@ -22,7 +22,7 @@ export default function UserAccountCard() {
         <Collapsible>
             <CardHeader
                 className="flex flex-row items-center justify-between space-y-0 pb-2 text-wrap">
-                <CardTitle className="text-sm font-medium">{userAccount.name}</CardTitle>
+                <CardTitle className="text-sm font-medium text-foreground">{userAccount.name}</CardTitle>
                 <div className="flex gap-2 ">
                     <CollapsibleTrigger asChild><Button variant="ghost" size="icon"
                                                         className="text-foreground"><Ellipsis/></Button></CollapsibleTrigger>
@@ -30,7 +30,7 @@ export default function UserAccountCard() {
             </CardHeader>
             <CardContent>
                 <div className="flex justify-between items-center mb-2">
-                    <div className="text-2xl font-bold">
+                    <div className="text-2xl font-bold dark:text-muted-foreground text-foreground/70">
                         {isBalanceVisible
                             ? new Intl.NumberFormat("pt-BR", {
                                 style: "currency",
